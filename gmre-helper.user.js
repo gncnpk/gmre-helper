@@ -9,6 +9,8 @@
 // @grant        none
 // @run-at       document-start
 // @license      MIT
+// @downloadURL https://update.greasyfork.org/scripts/543166/GMRE%20Helper.user.js
+// @updateURL https://update.greasyfork.org/scripts/543166/GMRE%20Helper.meta.js
 // ==/UserScript==
 
 (function() {
@@ -658,22 +660,48 @@
             function deleteAllNodes() {
                 ensureRoadSelected();
 
+                let maxAttempts = 100; // Maximum number of deletion attempts
+                let attemptCount = 0;
+                let previousNodeCount = -1;
+                let stuckCounter = 0;
+                const maxStuckAttempts = 5; // Max attempts when stuck on same node count
+
                 const processNodes = () => {
                     const nodes = document.getElementsByClassName(nodeSelector);
 
+                    // Check termination conditions
                     if (nodes.length === 0) {
                         logConsole("All nodes deleted successfully!");
                         return;
                     }
 
-                    logConsole(`${nodes.length} nodes remaining`);
+                    if (attemptCount >= maxAttempts) {
+                        logConsole(`Stopped after ${maxAttempts} attempts. ${nodes.length} nodes remaining.`);
+                        return;
+                    }
+
+                    // Check if we're stuck (same node count for multiple attempts)
+                    if (nodes.length === previousNodeCount) {
+                        stuckCounter++;
+                        if (stuckCounter >= maxStuckAttempts) {
+                            logConsole(`Stopped: unable to delete nodes after ${stuckCounter} attempts. ${nodes.length} nodes remaining.`);
+                            return;
+                        }
+                    } else {
+                        stuckCounter = 0; // Reset stuck counter if progress was made
+                    }
+
+                    previousNodeCount = nodes.length;
+                    attemptCount++;
+
+                    logConsole(`Attempt ${attemptCount}: ${nodes.length} nodes remaining`);
 
                     const node = nodes[0];
                     const rect = node.getBoundingClientRect();
                     const xCoord = rect.left + rect.width / 2;
                     const yCoord = rect.top + rect.height / 2;
 
-                    // Dispatch both events immediately
+                    // Dispatch mouse events
                     svg.dispatchEvent(new MouseEvent('mousedown', {
                         clientX: xCoord,
                         clientY: yCoord,
@@ -690,26 +718,33 @@
                         button: 0
                     }));
 
-                    // Use requestAnimationFrame for better performance
-                    requestAnimationFrame(() => {
+                    // Use setTimeout instead of requestAnimationFrame for better control
+                    setTimeout(() => {
                         const remainingNodes = document.getElementsByClassName(nodeSelector);
-                        if (remainingNodes.length > 0) {
-                            // If deletion didn't work, try alternative method
-                            if (remainingNodes.length === nodes.length) {
-                                const element = document.elementFromPoint(xCoord, yCoord);
-                                element?.dispatchEvent(new MouseEvent('click', {
-                                    clientX: xCoord,
-                                    clientY: yCoord,
-                                    bubbles: true,
-                                    cancelable: true,
-                                    button: 0
-                                }));
-                            }
 
-                            // Continue with next node after minimal delay
+                        // If deletion didn't work, try clicking the element directly
+                        if (remainingNodes.length === nodes.length && stuckCounter > 0) {
+                            try {
+                                const element = document.elementFromPoint(xCoord, yCoord);
+                                if (element) {
+                                    element.dispatchEvent(new MouseEvent('click', {
+                                        clientX: xCoord,
+                                        clientY: yCoord,
+                                        bubbles: true,
+                                        cancelable: true,
+                                        button: 0
+                                    }));
+                                }
+                            } catch (altError) {
+                                logConsole("Alternative click method failed: " + altError.message);
+                            }
+                        }
+
+                        // Continue processing if we haven't hit our limits
+                        if (attemptCount < maxAttempts && stuckCounter < maxStuckAttempts) {
                             processNodes();
                         }
-                    });
+                    }, 50); // Small delay to allow UI to update
                 };
 
                 processNodes();
