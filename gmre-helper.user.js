@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GMRE Helper
 // @namespace    https://github.com/gncnpk/gmre-helper
-// @version      0.0.7
+// @version      0.0.8
 // @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
@@ -69,6 +69,10 @@
             action: 'simplifyRoad',
             description: 'Simplify Road'
         },
+        'Escape': {
+            action: 'back',
+            description: 'Back/Exit'
+        },
         '`': {
             action: 'toggleSettings',
             description: 'Toggle Settings Panel'
@@ -84,7 +88,8 @@
         redo,
         deleteRoad,
         toggleSettings,
-        simplifyRoad
+        simplifyRoad,
+        back
     };
 
     let keyBindings = {};
@@ -263,6 +268,10 @@
             {
                 value: 'simplifyRoad',
                 text: 'Simplify Road'
+            },
+            {
+                value: 'back',
+                text: 'Back/Exit'
             }
         ];
 
@@ -628,6 +637,14 @@
             finishAction();
         } catch {
             logConsole("Delete road button not found...");
+        }
+    }
+
+    function back() {
+        try {
+            document.getElementsByClassName("VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-INsAgc VfPpkd-LgbsSe-OWXEXe-Bz112c-M1Soyc VfPpkd-LgbsSe-OWXEXe-dgl2Hf Rj2Mlf OLiIxf PDpWxe LQeN7 s73B3c MyHLpd wphPJc Q8G3mf")[0].click();
+        } catch {
+            logConsole("Back button not found...");
         }
     }
 
