@@ -1,5 +1,13 @@
 # gmre-helper
 Adds quality-of-life tweaks to Google Maps Road Editor.
 
-## Quality of Life Tweaks
-- Added keybinding menu, open it using ` (backtick)
+## Features
+### Keybindings
+#### Supported Actions
+- Finish/Submit
+- Select Road Type
+- Draw New Road
+- Undo
+- Redo
+#### Usage
+* Open the keybindings menu by pressing ` (backtick)
