@@ -22,3 +22,5 @@ Adds quality-of-life tweaks to Google Maps Road Editor.
 - `z` - Undo
 - `y` - Redo
 - `Delete` - Delete Road
+### Automatic Refresh
+* Automatically refresh the editor after submitting/saving edits.
