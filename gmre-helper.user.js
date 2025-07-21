@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GMRE Helper
 // @namespace    https://github.com/gncnpk/gmre-helper
-// @version      0.0.5
+// @version      0.0.6
 // @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
@@ -66,8 +66,8 @@
             description: 'Delete Road'
         },
         's': {
-            action: 'straightenRoad',
-            description: 'Straighten Road'
+            action: 'simplifyRoad',
+            description: 'Simplify Road'
         },
         '`': {
             action: 'toggleSettings',
@@ -84,7 +84,7 @@
         redo,
         deleteRoad,
         toggleSettings,
-        straightenRoad
+        simplifyRoad
     };
 
     let keyBindings = {};
@@ -261,8 +261,8 @@
                 text: 'Delete Road'
             },
             {
-                value: 'straightenRoad',
-                text: 'Straighten Road'
+                value: 'simplifyRoad',
+                text: 'Simplify Road'
             }
         ];
 
@@ -630,7 +630,7 @@
         }
     }
 
-    function straightenRoad() {
+    function simplifyRoad() {
         try {
             const svg = document.getElementsByTagName("svg")[19];
             const nodeSelector = "H8Ty1d TNpQ1d CQUm1b";
@@ -657,12 +657,23 @@
                 return false;
             }
 
-            function deleteAllNodes() {
+            function deleteHalfNodes() {
                 ensureRoadSelected();
+
+                const initialNodes = document.getElementsByClassName(nodeSelector);
+                const initialNodeCount = initialNodes.length;
+                const targetNodeCount = Math.ceil(initialNodeCount / 2); // Keep half (rounded up)
+
+                if (initialNodeCount === 0) {
+                    logConsole("No nodes found to delete");
+                    return;
+                }
+
+                logConsole(`Starting with ${initialNodeCount} nodes, target: ${targetNodeCount} nodes`);
 
                 let maxAttempts = 100; // Maximum number of deletion attempts
                 let attemptCount = 0;
-                let previousNodeCount = -1;
+                let previousNodeCount = initialNodeCount;
                 let stuckCounter = 0;
                 const maxStuckAttempts = 5; // Max attempts when stuck on same node count
 
@@ -670,8 +681,8 @@
                     const nodes = document.getElementsByClassName(nodeSelector);
 
                     // Check termination conditions
-                    if (nodes.length === 0) {
-                        logConsole("All nodes deleted successfully!");
+                    if (nodes.length <= targetNodeCount) {
+                        logConsole(`Target reached! Deleted ${initialNodeCount - nodes.length} nodes. ${nodes.length} nodes remaining.`);
                         return;
                     }
 
@@ -694,7 +705,7 @@
                     previousNodeCount = nodes.length;
                     attemptCount++;
 
-                    logConsole(`Attempt ${attemptCount}: ${nodes.length} nodes remaining`);
+                    logConsole(`Attempt ${attemptCount}: ${nodes.length} nodes remaining (target: ${targetNodeCount})`);
 
                     const node = nodes[0];
                     const rect = node.getBoundingClientRect();
@@ -740,8 +751,10 @@
                             }
                         }
 
-                        // Continue processing if we haven't hit our limits
-                        if (attemptCount < maxAttempts && stuckCounter < maxStuckAttempts) {
+                        // Continue processing if we haven't hit our limits and haven't reached target
+                        if (attemptCount < maxAttempts &&
+                            stuckCounter < maxStuckAttempts &&
+                            remainingNodes.length > targetNodeCount) {
                             processNodes();
                         }
                     }, 50); // Small delay to allow UI to update
@@ -750,10 +763,10 @@
                 processNodes();
             }
 
-            deleteAllNodes();
+            deleteHalfNodes();
 
         } catch (error) {
-            logConsole("Error in straightenRoad: " + error.message);
+            logConsole("Error in simplifyRoad: " + error.message);
         }
     }
 
