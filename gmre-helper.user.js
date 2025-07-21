@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GMRE Helper
 // @namespace    https://github.com/gncnpk/gmre-helper
-// @version      0.0.1
+// @version      0.0.2
 // @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
@@ -29,6 +29,8 @@
         '2': { action: 'selectRoadType', param: roadTypes.HIGHWAY, description: 'Select Highway' },
         '3': { action: 'selectRoadType', param: roadTypes.PARKING_LOT, description: 'Select Parking Lot' },
         '4': { action: 'selectRoadType', param: roadTypes.BIKING_WALKING_TRAIL, description: 'Select Biking/Walking Trail' },
+        'z': { action: 'undo', description: 'Undo' },
+        'y': { action: 'redo', description: 'Redo' },
         '`': { action: 'toggleSettings', description: 'Toggle Settings Panel' }
     };
 
@@ -37,6 +39,8 @@
         startNewRoad,
         finishAction,
         selectRoadType,
+        undo,
+        redo,
         toggleSettings
     };
 
@@ -169,7 +173,9 @@
         const actionOptions = [
             { value: 'startNewRoad', text: 'Start New Road' },
             { value: 'finishAction', text: 'Finish Action' },
-            { value: 'selectRoadType', text: 'Select Road Type' }
+            { value: 'selectRoadType', text: 'Select Road Type' },
+            { value: 'undo', text: 'Undo' },
+            { value: 'redo', text: 'Redo' }
         ];
 
         actionOptions.forEach(option => {
@@ -477,6 +483,22 @@
             document.getElementsByClassName("gzWBWb")[roadType].children[0].children[0].children[0].click();
         } catch {
             logConsole("Road type option not found...");
+        }
+    }
+
+    function undo() {
+        try {
+            document.getElementsByClassName("VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-INsAgc VfPpkd-LgbsSe-OWXEXe-Bz112c-M1Soyc VfPpkd-LgbsSe-OWXEXe-dgl2Hf Rj2Mlf OLiIxf PDpWxe LQeN7 s73B3c MyHLpd zWXP4b Q8G3mf")[0].click();
+        } catch {
+            logConsole("Undo button not found...");
+        }
+    }
+
+    function redo() {
+        try {
+            document.getElementsByClassName("VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-INsAgc VfPpkd-LgbsSe-OWXEXe-Bz112c-M1Soyc VfPpkd-LgbsSe-OWXEXe-dgl2Hf Rj2Mlf OLiIxf PDpWxe LQeN7 s73B3c MyHLpd zWXP4b Q8G3mf")[1].click();
+        } catch {
+            logConsole("Redo button not found...");
         }
     }
 
