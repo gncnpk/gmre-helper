@@ -2,7 +2,7 @@
 // @name         GMRE Helper
 // @namespace    https://github.com/gncnpk/gmre-helper
 // @version      0.0.1
-// @description  Adds quality-of-life tweaks to the road editor.
+// @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=google.com
