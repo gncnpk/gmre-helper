@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GMRE Helper
 // @namespace    https://github.com/gncnpk/gmre-helper
-// @version      0.0.2
+// @version      0.0.3
 // @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
@@ -31,6 +31,7 @@
         '4': { action: 'selectRoadType', param: roadTypes.BIKING_WALKING_TRAIL, description: 'Select Biking/Walking Trail' },
         'z': { action: 'undo', description: 'Undo' },
         'y': { action: 'redo', description: 'Redo' },
+        'Delete': { action: 'deleteRoad', description: 'Delete Road' },
         '`': { action: 'toggleSettings', description: 'Toggle Settings Panel' }
     };
 
@@ -41,6 +42,7 @@
         selectRoadType,
         undo,
         redo,
+        deleteRoad,
         toggleSettings
     };
 
@@ -175,7 +177,8 @@
             { value: 'finishAction', text: 'Finish Action' },
             { value: 'selectRoadType', text: 'Select Road Type' },
             { value: 'undo', text: 'Undo' },
-            { value: 'redo', text: 'Redo' }
+            { value: 'redo', text: 'Redo' },
+            { value: 'deleteRoad', text: 'Delete Road' }
         ];
 
         actionOptions.forEach(option => {
@@ -499,6 +502,15 @@
             document.getElementsByClassName("VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-INsAgc VfPpkd-LgbsSe-OWXEXe-Bz112c-M1Soyc VfPpkd-LgbsSe-OWXEXe-dgl2Hf Rj2Mlf OLiIxf PDpWxe LQeN7 s73B3c MyHLpd zWXP4b Q8G3mf")[1].click();
         } catch {
             logConsole("Redo button not found...");
+        }
+    }
+
+    function deleteRoad() {
+        try {
+            document.getElementsByClassName("VfPpkd-muHVFf-bMcfAe")[4].click();
+            finishAction();
+        } catch {
+            logConsole("Delete road button not found...");
         }
     }
 
