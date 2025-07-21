@@ -12,6 +12,7 @@ Adds quality-of-life tweaks to Google Maps Road Editor.
 - Undo
 - Redo
 - Delete Road
+- Straighten Road
 
 #### Usage
 * Open the keybindings menu by pressing ` (backtick)
@@ -26,6 +27,7 @@ Adds quality-of-life tweaks to Google Maps Road Editor.
 - `z` - Undo
 - `y` - Redo
 - `Delete` - Delete Road
+- `s` - Straighten Road
 
 ### Automatic Refresh
 * Automatically refresh the editor after submitting/saving edits.
