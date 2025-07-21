@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GMRE Helper
 // @namespace    https://github.com/gncnpk/gmre-helper
-// @version      0.0.6
+// @version      0.0.7
 // @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
@@ -600,6 +600,7 @@
     function selectRoadType(roadType) {
         try {
             document.getElementsByClassName("gzWBWb")[roadType].children[0].children[0].children[0].click();
+            finishAction();
         } catch {
             logConsole("Road type option not found...");
         }
@@ -788,9 +789,7 @@
                         const currentText = targetElement.innerText.trim();
                         if (currentText === 'All done') {
                             logConsole("'All done' detected - refreshing page...");
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 1000); // Small delay before refresh
+                            window.location.reload();
                         }
                     }
                 });
@@ -807,9 +806,7 @@
             const currentText = targetElement.innerText.trim();
             if (currentText === 'All done') {
                 logConsole("'All done' detected on load - refreshing page...");
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                window.location.reload();
             }
 
             logConsole("Auto-refresh watcher set up for 'All done' status");
