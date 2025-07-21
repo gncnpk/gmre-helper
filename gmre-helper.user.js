@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GMRE Helper
 // @namespace    https://github.com/gncnpk/gmre-helper
-// @version      0.0.4
+// @version      0.0.5
 // @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
@@ -63,6 +63,10 @@
             action: 'deleteRoad',
             description: 'Delete Road'
         },
+        's': {
+            action: 'straightenRoad',
+            description: 'Straighten Road'
+        },
         '`': {
             action: 'toggleSettings',
             description: 'Toggle Settings Panel'
@@ -77,7 +81,8 @@
         undo,
         redo,
         deleteRoad,
-        toggleSettings
+        toggleSettings,
+        straightenRoad
     };
 
     let keyBindings = {};
@@ -252,6 +257,10 @@
             {
                 value: 'deleteRoad',
                 text: 'Delete Road'
+            },
+            {
+                value: 'straightenRoad',
+                text: 'Straighten Road'
             }
         ];
 
@@ -616,6 +625,100 @@
             finishAction();
         } catch {
             logConsole("Delete road button not found...");
+        }
+    }
+
+    function straightenRoad() {
+        try {
+            const svg = document.getElementsByTagName("svg")[19];
+            const nodeSelector = "H8Ty1d TNpQ1d CQUm1b";
+
+            // Cache road selector queries
+            const roadSelectors = [
+                'path[stroke="#1a73e8"]',
+                'path[stroke*="blue"]',
+                'path[stroke="#4285f4"]'
+            ];
+
+            function ensureRoadSelected() {
+                for (const selector of roadSelectors) {
+                    const roadPath = document.querySelector(selector);
+                    if (roadPath) {
+                        roadPath.dispatchEvent(new MouseEvent('click', {
+                            bubbles: true,
+                            cancelable: true,
+                            button: 0
+                        }));
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function deleteAllNodes() {
+                ensureRoadSelected();
+
+                const processNodes = () => {
+                    const nodes = document.getElementsByClassName(nodeSelector);
+
+                    if (nodes.length === 0) {
+                        logConsole("All nodes deleted successfully!");
+                        return;
+                    }
+
+                    logConsole(`${nodes.length} nodes remaining`);
+
+                    const node = nodes[0];
+                    const rect = node.getBoundingClientRect();
+                    const xCoord = rect.left + rect.width / 2;
+                    const yCoord = rect.top + rect.height / 2;
+
+                    // Dispatch both events immediately
+                    svg.dispatchEvent(new MouseEvent('mousedown', {
+                        clientX: xCoord,
+                        clientY: yCoord,
+                        bubbles: true,
+                        cancelable: true,
+                        button: 0
+                    }));
+
+                    svg.dispatchEvent(new MouseEvent('mouseup', {
+                        clientX: xCoord,
+                        clientY: yCoord,
+                        bubbles: true,
+                        cancelable: true,
+                        button: 0
+                    }));
+
+                    // Use requestAnimationFrame for better performance
+                    requestAnimationFrame(() => {
+                        const remainingNodes = document.getElementsByClassName(nodeSelector);
+                        if (remainingNodes.length > 0) {
+                            // If deletion didn't work, try alternative method
+                            if (remainingNodes.length === nodes.length) {
+                                const element = document.elementFromPoint(xCoord, yCoord);
+                                element?.dispatchEvent(new MouseEvent('click', {
+                                    clientX: xCoord,
+                                    clientY: yCoord,
+                                    bubbles: true,
+                                    cancelable: true,
+                                    button: 0
+                                }));
+                            }
+
+                            // Continue with next node after minimal delay
+                            processNodes();
+                        }
+                    });
+                };
+
+                processNodes();
+            }
+
+            deleteAllNodes();
+
+        } catch (error) {
+            logConsole("Error in straightenRoad: " + error.message);
         }
     }
 
