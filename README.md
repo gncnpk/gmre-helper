@@ -9,6 +9,7 @@ Adds quality-of-life tweaks to Google Maps Road Editor.
 - Draw New Road
 - Undo
 - Redo
+- Delete Road
 #### Usage
 * Open the keybindings menu by pressing ` (backtick)
 #### Default Keybinds
@@ -20,3 +21,4 @@ Adds quality-of-life tweaks to Google Maps Road Editor.
 - `Enter` - Finish/Submit
 - `z` - Undo
 - `y` - Redo
+- `Delete` - Delete Road
