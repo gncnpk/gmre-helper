@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GMRE Helper
 // @namespace    https://github.com/gncnpk/gmre-helper
-// @version      0.0.3
+// @version      0.0.4
 // @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
@@ -23,16 +23,50 @@
 
     // Default key bindings configuration
     const defaultKeyBindings = {
-        'i': { action: 'startNewRoad', description: 'Start New Road' },
-        'Enter': { action: 'finishAction', description: 'Finish/Submit Action' },
-        '1': { action: 'selectRoadType', param: roadTypes.LOCAL_ROAD, description: 'Select Local Road' },
-        '2': { action: 'selectRoadType', param: roadTypes.HIGHWAY, description: 'Select Highway' },
-        '3': { action: 'selectRoadType', param: roadTypes.PARKING_LOT, description: 'Select Parking Lot' },
-        '4': { action: 'selectRoadType', param: roadTypes.BIKING_WALKING_TRAIL, description: 'Select Biking/Walking Trail' },
-        'z': { action: 'undo', description: 'Undo' },
-        'y': { action: 'redo', description: 'Redo' },
-        'Delete': { action: 'deleteRoad', description: 'Delete Road' },
-        '`': { action: 'toggleSettings', description: 'Toggle Settings Panel' }
+        'i': {
+            action: 'startNewRoad',
+            description: 'Start New Road'
+        },
+        'Enter': {
+            action: 'finishAction',
+            description: 'Finish/Submit Action'
+        },
+        '1': {
+            action: 'selectRoadType',
+            param: roadTypes.LOCAL_ROAD,
+            description: 'Select Local Road'
+        },
+        '2': {
+            action: 'selectRoadType',
+            param: roadTypes.HIGHWAY,
+            description: 'Select Highway'
+        },
+        '3': {
+            action: 'selectRoadType',
+            param: roadTypes.PARKING_LOT,
+            description: 'Select Parking Lot'
+        },
+        '4': {
+            action: 'selectRoadType',
+            param: roadTypes.BIKING_WALKING_TRAIL,
+            description: 'Select Biking/Walking Trail'
+        },
+        'z': {
+            action: 'undo',
+            description: 'Undo'
+        },
+        'y': {
+            action: 'redo',
+            description: 'Redo'
+        },
+        'Delete': {
+            action: 'deleteRoad',
+            description: 'Delete Road'
+        },
+        '`': {
+            action: 'toggleSettings',
+            description: 'Toggle Settings Panel'
+        }
     };
 
     // Available actions
@@ -58,13 +92,20 @@
         const stored = localStorage.getItem('gmre-helper-keybindings');
         if (stored) {
             try {
-                keyBindings = { ...defaultKeyBindings, ...JSON.parse(stored) };
+                keyBindings = {
+                    ...defaultKeyBindings,
+                    ...JSON.parse(stored)
+                };
             } catch (e) {
                 logConsole("Error loading saved key bindings, using defaults");
-                keyBindings = { ...defaultKeyBindings };
+                keyBindings = {
+                    ...defaultKeyBindings
+                };
             }
         } else {
-            keyBindings = { ...defaultKeyBindings };
+            keyBindings = {
+                ...defaultKeyBindings
+            };
         }
     }
 
@@ -132,26 +173,40 @@
 
     function createSettingsPanel() {
         // Create main panel
-        settingsPanel = createElement('div', { id: 'gmre-settings-panel' });
+        settingsPanel = createElement('div', {
+            id: 'gmre-settings-panel'
+        });
 
         // Create content container
-        const content = createElement('div', { id: 'gmre-settings-content' });
+        const content = createElement('div', {
+            id: 'gmre-settings-content'
+        });
 
         // Create header
-        const header = createElement('div', { id: 'gmre-settings-header' });
+        const header = createElement('div', {
+            id: 'gmre-settings-header'
+        });
         const title = createElement('h3', {}, 'GMRE Helper - Key Bindings');
-        const closeBtn = createElement('button', { id: 'gmre-close-settings' }, '×');
+        const closeBtn = createElement('button', {
+            id: 'gmre-close-settings'
+        }, '×');
         header.appendChild(title);
         header.appendChild(closeBtn);
 
         // Create body
-        const body = createElement('div', { id: 'gmre-settings-body' });
+        const body = createElement('div', {
+            id: 'gmre-settings-body'
+        });
 
         // Create bindings list
-        const bindingsList = createElement('div', { id: 'gmre-bindings-list' });
+        const bindingsList = createElement('div', {
+            id: 'gmre-bindings-list'
+        });
 
         // Create add binding section
-        const addBinding = createElement('div', { id: 'gmre-add-binding' });
+        const addBinding = createElement('div', {
+            id: 'gmre-add-binding'
+        });
         const addTitle = createElement('h4', {}, 'Add New Binding');
         addBinding.appendChild(addTitle);
 
@@ -170,19 +225,40 @@
         // Action select
         const actionDiv = createElement('div');
         const actionLabel = createElement('label', {}, 'Action:');
-        const actionSelect = createElement('select', { id: 'gmre-new-action' });
+        const actionSelect = createElement('select', {
+            id: 'gmre-new-action'
+        });
 
-        const actionOptions = [
-            { value: 'startNewRoad', text: 'Start New Road' },
-            { value: 'finishAction', text: 'Finish Action' },
-            { value: 'selectRoadType', text: 'Select Road Type' },
-            { value: 'undo', text: 'Undo' },
-            { value: 'redo', text: 'Redo' },
-            { value: 'deleteRoad', text: 'Delete Road' }
+        const actionOptions = [{
+                value: 'startNewRoad',
+                text: 'Start New Road'
+            },
+            {
+                value: 'finishAction',
+                text: 'Finish Action'
+            },
+            {
+                value: 'selectRoadType',
+                text: 'Select Road Type'
+            },
+            {
+                value: 'undo',
+                text: 'Undo'
+            },
+            {
+                value: 'redo',
+                text: 'Redo'
+            },
+            {
+                value: 'deleteRoad',
+                text: 'Delete Road'
+            }
         ];
 
         actionOptions.forEach(option => {
-            const opt = createElement('option', { value: option.value }, option.text);
+            const opt = createElement('option', {
+                value: option.value
+            }, option.text);
             actionSelect.appendChild(opt);
         });
 
@@ -195,17 +271,32 @@
             style: 'display: none;'
         });
         const roadTypeLabel = createElement('label', {}, 'Road Type:');
-        const roadTypeSelect = createElement('select', { id: 'gmre-new-param' });
+        const roadTypeSelect = createElement('select', {
+            id: 'gmre-new-param'
+        });
 
-        const roadTypeOptions = [
-            { value: roadTypes.LOCAL_ROAD, text: 'Local Road' },
-            { value: roadTypes.HIGHWAY, text: 'Highway' },
-            { value: roadTypes.PARKING_LOT, text: 'Parking Lot' },
-            { value: roadTypes.BIKING_WALKING_TRAIL, text: 'Biking/Walking Trail' }
+        const roadTypeOptions = [{
+                value: roadTypes.LOCAL_ROAD,
+                text: 'Local Road'
+            },
+            {
+                value: roadTypes.HIGHWAY,
+                text: 'Highway'
+            },
+            {
+                value: roadTypes.PARKING_LOT,
+                text: 'Parking Lot'
+            },
+            {
+                value: roadTypes.BIKING_WALKING_TRAIL,
+                text: 'Biking/Walking Trail'
+            }
         ];
 
         roadTypeOptions.forEach(option => {
-            const opt = createElement('option', { value: option.value }, option.text);
+            const opt = createElement('option', {
+                value: option.value
+            }, option.text);
             roadTypeSelect.appendChild(opt);
         });
 
@@ -213,7 +304,9 @@
         roadTypeDiv.appendChild(roadTypeSelect);
 
         // Add button
-        const addBtn = createElement('button', { id: 'gmre-add-btn' }, 'Add Binding');
+        const addBtn = createElement('button', {
+            id: 'gmre-add-btn'
+        }, 'Add Binding');
 
         // Assemble add binding section
         addBinding.appendChild(keyDiv);
@@ -222,8 +315,12 @@
         addBinding.appendChild(addBtn);
 
         // Create footer
-        const footer = createElement('div', { id: 'gmre-settings-footer' });
-        const resetBtn = createElement('button', { id: 'gmre-reset-defaults' }, 'Reset to Defaults');
+        const footer = createElement('div', {
+            id: 'gmre-settings-footer'
+        });
+        const resetBtn = createElement('button', {
+            id: 'gmre-reset-defaults'
+        }, 'Reset to Defaults');
         footer.appendChild(resetBtn);
 
         // Assemble body
@@ -388,10 +485,16 @@
         }
 
         Object.entries(keyBindings).forEach(([key, binding]) => {
-            const item = createElement('div', { class: 'gmre-binding-item' });
+            const item = createElement('div', {
+                class: 'gmre-binding-item'
+            });
 
-            const keySpan = createElement('span', { class: 'gmre-binding-key' }, key);
-            const descSpan = createElement('span', { class: 'gmre-binding-description' }, binding.description);
+            const keySpan = createElement('span', {
+                class: 'gmre-binding-key'
+            }, key);
+            const descSpan = createElement('span', {
+                class: 'gmre-binding-description'
+            }, binding.description);
             const removeBtn = createElement('button', {
                 class: 'gmre-remove-btn',
                 'data-key': key
@@ -443,7 +546,9 @@
 
     function resetToDefaults() {
         if (confirm('Reset all key bindings to defaults? This cannot be undone.')) {
-            keyBindings = { ...defaultKeyBindings };
+            keyBindings = {
+                ...defaultKeyBindings
+            };
             saveKeyBindings();
             updateSettingsPanel();
         }
@@ -514,11 +619,61 @@
         }
     }
 
-    // Initialize
+    // Add this function after the existing action functions
+    function setupAutoRefreshWatcher() {
+        function watchForAllDone() {
+            const targetElement = document.getElementsByClassName("jfXz1e")[0];
+
+            if (!targetElement) {
+                // Element not found, try again in 1 second
+                setTimeout(watchForAllDone, 1000);
+                return;
+            }
+
+            // Create a MutationObserver to watch for text changes
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                        const currentText = targetElement.innerText.trim();
+                        if (currentText === 'All done') {
+                            logConsole("'All done' detected - refreshing page...");
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000); // Small delay before refresh
+                        }
+                    }
+                });
+            });
+
+            // Configure the observer to watch for text changes
+            observer.observe(targetElement, {
+                childList: true,
+                subtree: true,
+                characterData: true
+            });
+
+            // Also check immediately in case the text is already there
+            const currentText = targetElement.innerText.trim();
+            if (currentText === 'All done') {
+                logConsole("'All done' detected on load - refreshing page...");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }
+
+            logConsole("Auto-refresh watcher set up for 'All done' status");
+        }
+
+        // Start watching after a short delay to ensure page is loaded
+        setTimeout(watchForAllDone, 2000);
+    }
+
+    // Then modify your init() function to include this:
     async function init() {
         logConsole("Initializing with configurable key bindings...");
         loadKeyBindings();
         setupKeyListener();
+        setupAutoRefreshWatcher(); // Add this line
         logConsole("Key bindings loaded. Press ` (backtick) to open settings.");
     }
 
