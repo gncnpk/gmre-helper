@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GMRE Helper
 // @namespace    https://github.com/gncnpk/gmre-helper
-// @version      0.0.8
+// @version      0.0.9
 // @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
@@ -272,6 +272,10 @@
             {
                 value: 'back',
                 text: 'Back/Exit'
+            },
+            {
+                value: 'toggleSettings',
+                text: 'Toggle Settings Panel'
             }
         ];
 
