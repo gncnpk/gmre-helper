@@ -23,9 +23,13 @@
         "BIKING_WALKING_TRAIL": 3,
     };
 
-    // Default key bindings configuration
+    // Default key bindings configuration - now using e.key for better international support
     const defaultKeyBindings = {
-        'KeyI': {
+        'i': {
+            action: 'startNewRoad',
+            description: 'Start New Road'
+        },
+        'I': {
             action: 'startNewRoad',
             description: 'Start New Road'
         },
@@ -33,31 +37,39 @@
             action: 'finishAction',
             description: 'Finish/Submit Action'
         },
-        'Digit1': {
+        '1': {
             action: 'selectRoadType',
             param: roadTypes.LOCAL_ROAD,
             description: 'Select Local Road'
         },
-        'Digit2': {
+        '2': {
             action: 'selectRoadType',
             param: roadTypes.HIGHWAY,
             description: 'Select Highway'
         },
-        'Digit3': {
+        '3': {
             action: 'selectRoadType',
             param: roadTypes.PARKING_LOT,
             description: 'Select Parking Lot'
         },
-        'Digit4': {
+        '4': {
             action: 'selectRoadType',
             param: roadTypes.BIKING_WALKING_TRAIL,
             description: 'Select Biking/Walking Trail'
         },
-        'KeyZ': {
+        'z': {
             action: 'undo',
             description: 'Undo'
         },
-        'KeyY': {
+        'Z': {
+            action: 'undo',
+            description: 'Undo'
+        },
+        'y': {
+            action: 'redo',
+            description: 'Redo'
+        },
+        'Y': {
             action: 'redo',
             description: 'Redo'
         },
@@ -65,7 +77,11 @@
             action: 'deleteRoad',
             description: 'Delete Road'
         },
-        'KeyS': {
+        's': {
+            action: 'simplifyRoad',
+            description: 'Simplify Road'
+        },
+        'S': {
             action: 'simplifyRoad',
             description: 'Simplify Road'
         },
@@ -73,19 +89,32 @@
             action: 'back',
             description: 'Back/Exit'
         },
-        'NumpadAdd': {
+        '+': {
             action: 'zoomIn',
             description: 'Zoom In'
-        }, // ← new
-        'NumpadSubtract': {
+        },
+        '-': {
             action: 'zoomOut',
             description: 'Zoom Out'
-        }, // ← new
-        'KeyP': {
+        },
+        'p': {
             action: 'markPrivateRoad',
             description: 'Mark Private Road'
-        }, // ← new
-        'Backquote': {
+        },
+        'P': {
+            action: 'markPrivateRoad',
+            description: 'Mark Private Road'
+        },
+        '`': {
+            action: 'toggleSettings',
+            description: 'Toggle Settings Panel'
+        },
+        '~': {
+            action: 'toggleSettings',
+            description: 'Toggle Settings Panel'
+        },
+        // Alternative settings key for keyboards without backtick
+        'F1': {
             action: 'toggleSettings',
             description: 'Toggle Settings Panel'
         }
@@ -102,7 +131,7 @@
         toggleSettings,
         simplifyRoad,
         back,
-        zoomIn, // ← added
+        zoomIn,
         zoomOut,
         markPrivateRoad
     };
@@ -169,7 +198,8 @@
                 return;
             }
 
-            const key = e.code;
+            // Use e.key for better international keyboard support
+            const key = e.key;
             const binding = keyBindings[key];
 
             if (binding && actions[binding.action]) {
@@ -225,6 +255,20 @@
             id: 'gmre-settings-body'
         });
 
+        // Add instructions
+        const instructions = createElement('div', {
+            id: 'gmre-instructions',
+            style: 'background: #f0f8ff; padding: 12px; border-radius: 4px; margin-bottom: 16px; font-size: 14px; color: #333;'
+        });
+        instructions.innerHTML = `
+            <strong>Instructions:</strong><br>
+            • Use actual key characters (like "i", "1", "+") rather than key codes<br>
+            • Both uppercase and lowercase letters work<br>
+            • Numbers work from both top row and numpad<br>
+            • Use F1, \`, or ~ to open settings if backtick doesn't work on your keyboard
+        `;
+        body.appendChild(instructions);
+
         // Create bindings list
         const bindingsList = createElement('div', {
             id: 'gmre-bindings-list'
@@ -243,11 +287,17 @@
         const keyInput = createElement('input', {
             type: 'text',
             id: 'gmre-new-key',
-            placeholder: 'Enter key code (e.g. KeyI, Digit1, Backquote)',
-            maxlength: '10'
+            placeholder: 'Press a key or type character (e.g. i, 1, F1)',
+            maxlength: '20'
         });
         keyDiv.appendChild(keyLabel);
         keyDiv.appendChild(keyInput);
+
+        // Add key capture functionality
+        keyInput.addEventListener('keydown', function(e) {
+            e.preventDefault();
+            this.value = e.key;
+        });
 
         // Action select
         const actionDiv = createElement('div');
@@ -295,11 +345,11 @@
             {
                 value: 'zoomIn',
                 text: 'Zoom In'
-            }, // ← new
+            },
             {
                 value: 'zoomOut',
                 text: 'Zoom Out'
-            }, // ← new
+            },
             {
                 value: 'markPrivateRoad',
                 text: 'Mark Private Road'
@@ -406,8 +456,8 @@
                 transform: translate(-50%, -50%);
                 background: white;
                 border-radius: 8px;
-                width: 500px;
-                max-height: 600px;
+                width: 600px;
+                max-height: 700px;
                 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             }
             #gmre-settings-header {
@@ -432,7 +482,7 @@
             }
             #gmre-settings-body {
                 padding: 20px;
-                max-height: 500px;
+                max-height: 600px;
                 overflow-y: auto;
             }
             .gmre-binding-item {
@@ -448,6 +498,8 @@
                 padding: 4px 8px;
                 border-radius: 4px;
                 font-weight: bold;
+                min-width: 40px;
+                text-align: center;
             }
             .gmre-binding-description {
                 flex: 1;
@@ -484,7 +536,7 @@
                 padding: 6px;
                 border: 1px solid #ddd;
                 border-radius: 4px;
-                width: 150px;
+                width: 200px;
             }
             #gmre-add-btn, #gmre-reset-defaults {
                 background: #4285f4;
@@ -614,7 +666,7 @@
         settingsPanel.style.display = isSettingsOpen ? 'block' : 'none';
     }
 
-    // Action functions
+    // Action functions (keeping existing implementations)
     function startNewRoad() {
         try {
             document
@@ -897,8 +949,8 @@
         logConsole("Initializing with configurable key bindings...");
         loadKeyBindings();
         setupKeyListener();
-        setupAutoRefreshWatcher(); // Add this line
-        logConsole("Key bindings loaded. Press ` (backtick) to open settings.");
+        setupAutoRefreshWatcher();
+        logConsole("Key bindings loaded. Press `, ~, or F1 to open settings.");
     }
 
     init();
