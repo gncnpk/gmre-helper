@@ -13,6 +13,9 @@ Adds quality-of-life tweaks to Google Maps Road Editor.
 - Redo
 - Delete Road
 - Simplify Road
+- Zoom In
+- Zoom Out
+- Mark Private Road
 
 #### Usage
 * Open the keybindings menu by pressing ` (backtick)
@@ -28,6 +31,9 @@ Adds quality-of-life tweaks to Google Maps Road Editor.
 - `y` - Redo
 - `Delete` - Delete Road
 - `s` - Simplify Road
+- `+` - Zoom In
+- `-` - Zoom Out
+- `p` - Mark Private Road
 
 ### Automatic Refresh
 * Automatically refresh the editor after submitting/saving edits.
