@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GMRE Helper
 // @namespace    https://github.com/gncnpk/gmre-helper
-// @version      0.0.9
+// @version      0.0.10
 // @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
@@ -73,6 +73,18 @@
             action: 'back',
             description: 'Back/Exit'
         },
+        '+': {
+            action: 'zoomIn',
+            description: 'Zoom In'
+        }, // ← new
+        '-': {
+            action: 'zoomOut',
+            description: 'Zoom Out'
+        }, // ← new
+        'p': {
+            action: 'markPrivateRoad',
+            description: 'Mark Private Road'
+        }, // ← new
         '`': {
             action: 'toggleSettings',
             description: 'Toggle Settings Panel'
@@ -89,7 +101,10 @@
         deleteRoad,
         toggleSettings,
         simplifyRoad,
-        back
+        back,
+        zoomIn, // ← added
+        zoomOut,
+        markPrivateRoad
     };
 
     let keyBindings = {};
@@ -276,6 +291,18 @@
             {
                 value: 'toggleSettings',
                 text: 'Toggle Settings Panel'
+            },
+            {
+                value: 'zoomIn',
+                text: 'Zoom In'
+            }, // ← new
+            {
+                value: 'zoomOut',
+                text: 'Zoom Out'
+            }, // ← new
+            {
+                value: 'markPrivateRoad',
+                text: 'Mark Private Road'
             }
         ];
 
@@ -649,6 +676,34 @@
             document.getElementsByClassName("VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-INsAgc VfPpkd-LgbsSe-OWXEXe-Bz112c-M1Soyc VfPpkd-LgbsSe-OWXEXe-dgl2Hf Rj2Mlf OLiIxf PDpWxe LQeN7 s73B3c MyHLpd wphPJc Q8G3mf")[0].click();
         } catch {
             logConsole("Back button not found...");
+        }
+    }
+
+    function zoomIn() {
+        try {
+            document
+                .querySelectorAll(".VfPpkd-Bz112c-LgbsSe.yHy1rc.eT1oJ.mN1ivc.A07Gsf")[0]
+                .click();
+        } catch {
+            logConsole("Zoom In button not found...");
+        }
+    }
+
+    function zoomOut() {
+        try {
+            document
+                .querySelectorAll(".VfPpkd-Bz112c-LgbsSe.yHy1rc.eT1oJ.mN1ivc.A07Gsf")[1]
+                .click();
+        } catch {
+            logConsole("Zoom Out button not found...");
+        }
+    }
+
+    function markPrivateRoad() {
+        try {
+            document.getElementsByClassName("VfPpkd-muHVFf-bMcfAe")[3].click();
+        } catch {
+            logConsole("Private road button not found...");
         }
     }
 
