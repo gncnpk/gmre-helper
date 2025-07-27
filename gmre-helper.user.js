@@ -25,7 +25,7 @@
 
     // Default key bindings configuration
     const defaultKeyBindings = {
-        'KeyI': {
+        'i': {
             action: 'startNewRoad',
             description: 'Start New Road'
         },
@@ -33,31 +33,31 @@
             action: 'finishAction',
             description: 'Finish/Submit Action'
         },
-        'Digit1': {
+        '1': {
             action: 'selectRoadType',
             param: roadTypes.LOCAL_ROAD,
             description: 'Select Local Road'
         },
-        'Digit2': {
+        '2': {
             action: 'selectRoadType',
             param: roadTypes.HIGHWAY,
             description: 'Select Highway'
         },
-        'Digit3': {
+        '3': {
             action: 'selectRoadType',
             param: roadTypes.PARKING_LOT,
             description: 'Select Parking Lot'
         },
-        'Digit4': {
+        '4': {
             action: 'selectRoadType',
             param: roadTypes.BIKING_WALKING_TRAIL,
             description: 'Select Biking/Walking Trail'
         },
-        'KeyZ': {
+        'z': {
             action: 'undo',
             description: 'Undo'
         },
-        'KeyY': {
+        'y': {
             action: 'redo',
             description: 'Redo'
         },
@@ -65,7 +65,7 @@
             action: 'deleteRoad',
             description: 'Delete Road'
         },
-        'KeyS': {
+        's': {
             action: 'simplifyRoad',
             description: 'Simplify Road'
         },
@@ -73,19 +73,19 @@
             action: 'back',
             description: 'Back/Exit'
         },
-        'NumpadAdd': {
+        '+': {
             action: 'zoomIn',
             description: 'Zoom In'
         }, // ← new
-        'NumpadSubtract': {
+        '-': {
             action: 'zoomOut',
             description: 'Zoom Out'
         }, // ← new
-        'KeyP': {
+        'p': {
             action: 'markPrivateRoad',
             description: 'Mark Private Road'
         }, // ← new
-        'Backquote': {
+        '`': {
             action: 'toggleSettings',
             description: 'Toggle Settings Panel'
         }
@@ -169,7 +169,7 @@
                 return;
             }
 
-            const key = e.code;
+            const key = e.key;
             const binding = keyBindings[key];
 
             if (binding && actions[binding.action]) {
@@ -243,7 +243,7 @@
         const keyInput = createElement('input', {
             type: 'text',
             id: 'gmre-new-key',
-            placeholder: 'Enter key code (e.g. KeyI, Digit1, Backquote)',
+            placeholder: 'Enter key',
             maxlength: '10'
         });
         keyDiv.appendChild(keyLabel);
