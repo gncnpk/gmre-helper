@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GMRE Helper
 // @namespace    https://github.com/gncnpk/gmre-helper
-// @version      0.0.10
+// @version      0.0.11
 // @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
@@ -25,7 +25,7 @@
 
     // Default key bindings configuration
     const defaultKeyBindings = {
-        'i': {
+        'KeyI': {
             action: 'startNewRoad',
             description: 'Start New Road'
         },
@@ -33,31 +33,31 @@
             action: 'finishAction',
             description: 'Finish/Submit Action'
         },
-        '1': {
+        'Digit1': {
             action: 'selectRoadType',
             param: roadTypes.LOCAL_ROAD,
             description: 'Select Local Road'
         },
-        '2': {
+        'Digit2': {
             action: 'selectRoadType',
             param: roadTypes.HIGHWAY,
             description: 'Select Highway'
         },
-        '3': {
+        'Digit3': {
             action: 'selectRoadType',
             param: roadTypes.PARKING_LOT,
             description: 'Select Parking Lot'
         },
-        '4': {
+        'Digit4': {
             action: 'selectRoadType',
             param: roadTypes.BIKING_WALKING_TRAIL,
             description: 'Select Biking/Walking Trail'
         },
-        'z': {
+        'KeyZ': {
             action: 'undo',
             description: 'Undo'
         },
-        'y': {
+        'KeyY': {
             action: 'redo',
             description: 'Redo'
         },
@@ -65,7 +65,7 @@
             action: 'deleteRoad',
             description: 'Delete Road'
         },
-        's': {
+        'KeyS': {
             action: 'simplifyRoad',
             description: 'Simplify Road'
         },
@@ -73,19 +73,19 @@
             action: 'back',
             description: 'Back/Exit'
         },
-        '+': {
+        'NumpadAdd': {
             action: 'zoomIn',
             description: 'Zoom In'
         }, // ← new
-        '-': {
+        'NumpadSubtract': {
             action: 'zoomOut',
             description: 'Zoom Out'
         }, // ← new
-        'p': {
+        'KeyP': {
             action: 'markPrivateRoad',
             description: 'Mark Private Road'
         }, // ← new
-        '`': {
+        'Backquote': {
             action: 'toggleSettings',
             description: 'Toggle Settings Panel'
         }
@@ -169,7 +169,7 @@
                 return;
             }
 
-            const key = e.key;
+            const key = e.code;
             const binding = keyBindings[key];
 
             if (binding && actions[binding.action]) {
@@ -243,7 +243,7 @@
         const keyInput = createElement('input', {
             type: 'text',
             id: 'gmre-new-key',
-            placeholder: 'Enter key',
+            placeholder: 'Enter key code (e.g. KeyI, Digit1, Backquote)',
             maxlength: '10'
         });
         keyDiv.appendChild(keyLabel);
