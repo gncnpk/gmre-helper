@@ -5,7 +5,7 @@
 // @description  Adds quality-of-life tweaks to Google Maps Road Editor.
 // @author       Gavin Canon-Phratsachack (https://github.com/gncnpk)
 // @match        https://maps.google.com/roadeditor/iframe*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=google.com
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=google.com/maps
 // @grant        none
 // @run-at       document-start
 // @license      MIT
